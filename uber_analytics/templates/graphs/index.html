@@ -1,18 +1,25 @@
 {% extends "base.html" %}
 {% block title %}Attendance Graphs{% endblock %}
-{% block extrahead %}
+{% block head_additional %}
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript" src="../static/lib/Chart.js"></script>
+    <script type="text/javascript" src="../analytics/static/lib/Chart.js"></script>
     <script type="text/javascript">
-        var attendance_data = {{ current_registrations }};
+        var current_attendance_data = {{ current_registrations|safe }};
     </script>
-    <script type="text/javascript" src="../static/analytics.js"></script>
+    <script type="text/javascript" src="../analytics/static/attendance.js"></script>
 {% endblock %}
 {% block content %}
 
-<h1>Attendance per day:</h1>
-This graph only includes attendees that have paid in full and are not dealers.  <br/>
-It does not include comp'd badges for staff, guests, bands.
-It does not include dealers.
+        <h1>Attendance per day:</h1>
+        <p>
+            This graph only includes attendees that have paid in full and are not dealers.  <br/>
+            It does not include comp'd badges for staff, guests, bands. It does not include dealers.<br/>
+        </p>
+
+        <canvas id="attendanceGraph" width="800" height="400"></canvas>
+
+
+
+
 
 {% endblock %}
