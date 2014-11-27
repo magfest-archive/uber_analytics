@@ -3,6 +3,9 @@
 {% block extrahead %}
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript" src="../static/lib/Chart.js"></script>
+    <script type="text/javascript">
+        var attendance_data = {{ current_registrations }};
+    </script>
     <script type="text/javascript" src="../static/analytics.js"></script>
 {% endblock %}
 {% block content %}
@@ -11,9 +14,5 @@
 This graph only includes attendees that have paid in full and are not dealers.  <br/>
 It does not include comp'd badges for staff, guests, bands.
 It does not include dealers.
-
-<script type="text/javascript">
-    var attendance_data = {{ current_registrations }};
-</script>
 
 {% endblock %}
