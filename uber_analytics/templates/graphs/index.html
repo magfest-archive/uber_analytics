@@ -1,13 +1,19 @@
 {% extends "base.html" %}
 {% block title %}Attendance Graphs{% endblock %}
+{% block extrahead %}
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="../static/lib/Chart.js"></script>
+    <script type="text/javascript" src="../static/analytics.js"></script>
+{% endblock %}
 {% block content %}
 
-<h2> Want some data? </h2>
+<h1>Attendance per day:</h1>
+This graph only includes attendees that have paid in full and are not dealers.  <br/>
+It does not include comp'd badges for staff, guests, bands.
+It does not include dealers.
 
-Here are the curerent count of registrations by day: <br/>
-
-<pre>
-{{ current_registrations }}
-</pre>
+<script type="text/javascript">
+    var attendance_data = {{ current_registrations }};
+</script>
 
 {% endblock %}
