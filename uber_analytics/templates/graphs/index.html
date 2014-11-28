@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Attendance Graphs{% endblock %}
+{% block head_additional %}
+    <!-- <script type="text/javascript" src="https://www.google.com/jsapi"></script> dont think we need this? -->
+    <script type="text/javascript" src="../analytics/static/lib/Chart.js"></script>
+    <script type="text/javascript">
+        var current_attendance_data = {{ current_registrations|jsonize }};
+    </script>
+    <script src="../static/lib/moment/moment.min.js"></script>
+    <script type="text/javascript" src="../analytics/static/attendance.js"></script>
+    <link rel="stylesheet" type="text/css" href="../analytics/static/analytics.css" />
+{% endblock %}
+{% block content %}
+
+        <h1>Attendance per day:</h1>
+        <p>
+            This graph only includes attendees that have paid in full and are not dealers.  <br/>
+            It does not include comp'd badges for staff, guests, bands. It does not include dealers.<br/>
+        </p>
+
+        {%comment%}Yea.... I don't know how to fix the w/h here.  someone with better css/html5 do it.{%endcomment%}
+        <canvas id="attendanceGraph" width="1000" height="800"></canvas>
+
+{% endblock %}
