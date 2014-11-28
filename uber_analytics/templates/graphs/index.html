@@ -1,12 +1,14 @@
 {% extends "base.html" %}
 {% block title %}Attendance Graphs{% endblock %}
 {% block head_additional %}
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <!-- <script type="text/javascript" src="https://www.google.com/jsapi"></script> dont think we need this? -->
     <script type="text/javascript" src="../analytics/static/lib/Chart.js"></script>
     <script type="text/javascript">
-        var current_attendance_data = {{ current_registrations|safe }};
+        var current_attendance_data = {{ current_registrations|jsonize }};
     </script>
+    <script src="../static/lib/moment/moment.min.js"></script>
     <script type="text/javascript" src="../analytics/static/attendance.js"></script>
+    <link rel="stylesheet" type="text/css" href="../analytics/static/analytics.css" />
 {% endblock %}
 {% block content %}
 
@@ -16,10 +18,7 @@
             It does not include comp'd badges for staff, guests, bands. It does not include dealers.<br/>
         </p>
 
-        <canvas id="attendanceGraph" width="800" height="400"></canvas>
-
-
-
-
+        {%comment%}Yea.... I don't know how to fix the w/h here.  someone with better css/html5 do it.{%endcomment%}
+        <canvas id="attendanceGraph" width="1000" height="800"></canvas>
 
 {% endblock %}

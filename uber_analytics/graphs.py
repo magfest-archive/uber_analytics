@@ -103,15 +103,12 @@ class RegistrationDataOneYear:
 
 
     def dump_data(self):
-        return [
-            {"registrations_per_day": self.registrations_per_day},
-            {"registrations_per_day_cumulative_sum": self.registrations_per_day_cumulative_sum},
-            {"event_name": self.event_name},
-            {"event_end_date": self.end_date.strftime("%d-%m-%Y")},
-        ]
-
-    def to_JSON(self):
-        return json.dumps(self.dump_data(), indent=4)
+        return {
+            "registrations_per_day": self.registrations_per_day,
+            "registrations_per_day_cumulative_sum": self.registrations_per_day_cumulative_sum,
+            "event_name": self.event_name,
+            "event_end_date": self.end_date.strftime("%d-%m-%Y"),
+        }
 
 
 @all_renderable(STATS)
@@ -121,7 +118,7 @@ class Root:
         graph_data_current_year.query_current_year(session)
 
         return {
-            'current_registrations': graph_data_current_year.to_JSON(),
+            'current_registrations': graph_data_current_year.dump_data(),
         }
 
 Uber.graphs = Root()
