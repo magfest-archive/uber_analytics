@@ -78,7 +78,7 @@ function generate_date_labels(year, end_date_to_use, start_index, end_index) {
   return labels;
 }
 
-function generate_dataset(year_data, start_index, end_index) {
+function generate_dataset(year_data, start_index, end_index, current_year) {
   var dataset = new Object();
 
   dataset.label = year_data.event_name;
@@ -90,12 +90,19 @@ function generate_dataset(year_data, start_index, end_index) {
 
   dataset.data = data;
 
-  dataset.fillColor = "rgba(220,220,220,0.2)";
-  dataset.strokeColor = "rgba(220,220,220,1)";
-  dataset.pointColor = "rgba(220,220,220,1)";
+  if (!current_year) {
+    dataset.fillColor = "rgba(220,220,220,0.2)";
+    dataset.strokeColor = "rgba(220,220,220,1)";
+    dataset.pointColor = "rgba(220,220,220,1)";
+  } else {
+    dataset.fillColor = "rgba(100,220,256,0.2)";
+    dataset.strokeColor = "rgba(100,220,256,1)";
+    dataset.pointColor = "rgba(80,256,256,1)";
+  }
+
   dataset.pointStrokeColor = "#fff";
   dataset.pointHighlightFill = "#fff";
-  dataset.pointHighlightStroke = "rgba(220,220,220,1)";
+  dataset.pointHighlightStroke = "rgba(80,256,256,1)";
 
   return dataset;
 }
@@ -121,7 +128,12 @@ function convert_raw_attendance_data(raw_data)
   for (var i = 0; i < raw_data.years.length; ++i) {
     var current_year = raw_data.years[i];
 
-    var current_year_dataset = generate_dataset(current_year, first_useful_datapoint_index, last_useful_datapoint_index);
+    var current_year_dataset = generate_dataset(
+      current_year,
+      first_useful_datapoint_index,
+      last_useful_datapoint_index,
+      i == raw_data.years.length-1
+    );
     chart_data.datasets.push(current_year_dataset);
   }
 
@@ -135,11 +147,13 @@ function draw_attendance_chart(raw_data)
   var ctx = $("#attendanceGraph").get(0).getContext("2d");
 
   var options = {
-    animation: true,
+    animation: false,
     bezierCurve: true,
     pointDot: false,
     pointHitDetectionRadius: 1,
-    scaleShowLabels: true
+    scaleShowLabels: true,
+    multiTooltipTemplate: "<%= datasetLabel %>: <%= value %>",
+    showXLabels: 20
   };
 
   var attendanceChart = new Chart(ctx).Line(chart_data, options);
