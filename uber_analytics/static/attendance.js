@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------
 
 var date_format = "DD-MM-YYYY";
+var extra_attendance_data = [];
 
 function get_first_useful_datapoint_index(raw_data) {
   var first_datapoint_index = Number.MAX_VALUE;
@@ -144,6 +145,9 @@ function draw_attendance_chart(raw_data)
   var attendanceChart = new Chart(ctx).Line(chart_data, options);
 }
 
+// read from the following GLOBAL VARIABLES and compile a combined data source from them:
+// current_attendance_data - from THIS YEAR's live reg data
+// extra_attendance_data - all OTHER YEARs' historical, non-live registration data.  this may not exist.
 function collect_all_attendance_data()
 {
   var all_attendance_data = new Object();
@@ -151,16 +155,11 @@ function collect_all_attendance_data()
   // use this year's registration data as the base date for all other years
   all_attendance_data.end_date_to_use = moment(current_attendance_data.event_end_date, date_format);
 
-  all_attendance_data.years = []
+  // start with the earlier years
+  all_attendance_data.years = extra_attendance_data;
 
   // add the current year information (which is live from the data)
   all_attendance_data.years.push(current_attendance_data);
-
-  // TODO: get the other years' attendance data appended in here if they exist
-  // we will eventually read this out of a JSON file or a datastore or similar.
-  // for (i in other_years_read_from_files) {
-  //    all_attendance_data.years.push(that_year);
-  // }
 
   return all_attendance_data;
 }
@@ -195,11 +194,20 @@ function verify_data_has_same_amount_of_datapoints_each_year(all_attendance_data
 }
 
 $( document ).ready(function() {
-  var all_attendance_data = collect_all_attendance_data();
 
-  if (!verify_data_has_same_amount_of_datapoints_each_year(all_attendance_data)) {
-    return;
-  }
+  // try and load optional data from previous comparison years.
+  // it's OK for this to fail and it probably will unless the admin installs this file on the server
+  $.getJSON( "../analytics/static/extra-attendance-data.json", function( data ) {
+    extra_attendance_data = data;
+  }).fail(function() {
+    // couldn't load the extra data.  not a big deal, it may legitimately not be present
+  }).always(function() {
+    var all_attendance_data = collect_all_attendance_data();
 
-  draw_attendance_chart(all_attendance_data);
+    if (!verify_data_has_same_amount_of_datapoints_each_year(all_attendance_data)) {
+      return;
+    }
+
+    draw_attendance_chart(all_attendance_data);
+  });
 });
