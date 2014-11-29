@@ -12,8 +12,7 @@ django.conf.settings.TEMPLATE_DIRS.insert(0, join(config['module_root'], 'templa
 # relative paths included in base.html -Dom
 # idea: look at app.merge() or cherrypy.config.update()
 class AnalyticsStatic:
-    def index(self, session):
-        return None
+    pass
 
 analytics_app_config = {
     '/static': {
