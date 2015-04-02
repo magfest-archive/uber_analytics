@@ -1,6 +1,4 @@
 uber-analytics
 ==============
 
-analytics module for Magfest's ubersystem
-
-WIP: does not work yet.
+analytics module for Magfest's ubersystem, displays pretty graphs and such.
