@@ -111,7 +111,7 @@ class RegistrationDataOneYear:
         }
 
 
-@all_renderable(STATS)
+@all_renderable(c.STATS)
 class Root:
     def index(self, session):
         graph_data_current_year = RegistrationDataOneYear()
