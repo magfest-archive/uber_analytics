@@ -120,5 +120,3 @@ class Root:
         return {
             'current_registrations': graph_data_current_year.dump_data(),
         }
-
-Uber.graphs = Root()
