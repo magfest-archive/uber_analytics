@@ -71,7 +71,8 @@ class RegistrationDataOneYear:
             day_index = day_offset - 1
 
             if day_index < 0 or day_index >= self.num_days_to_report:
-                raise 'Analytics data processing: dates are invalid (not within range of 1 year before ESCHATON). check that your ESCHATON config setting matches the data in the database.'
+                log.info('ignoring some analytics data because it\'s not in range of the year before c.ESCHATON. either c.ESCHATON is set incorrectly or you have registrations starting 1 year before ESCHATON, or occuring after ESCHATON. day_index=' + str(day_index))
+                continue
 
             self.registrations_per_day[day_index] = reg_count
 
