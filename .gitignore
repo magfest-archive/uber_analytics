@@ -1,4 +1,5 @@
 uber_analytics/static/extra-attendance-data.json.idea
+uber_analytics/static/analytics/extra-attendance-data.json
 env
 *.pyc
 *.egg-info
