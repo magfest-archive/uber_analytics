@@ -2,13 +2,13 @@
 {% block title %}Attendance Graphs{% endblock %}
 {% block head_additional %}
     <!-- <script type="text/javascript" src="https://www.google.com/jsapi"></script> dont think we need this? -->
-    <script type="text/javascript" src="../analytics/static/lib/Chart.js"></script>
+    <script type="text/javascript" src="../static/lib/Chart.js"></script>
     <script type="text/javascript">
         var current_attendance_data = {{ current_registrations|jsonize }};
     </script>
     <script src="../static/lib/moment/moment.min.js"></script>
-    <script type="text/javascript" src="../analytics/static/attendance.js"></script>
-    <link rel="stylesheet" type="text/css" href="../analytics/static/analytics.css" />
+    <script type="text/javascript" src="../static/attendance.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/analytics.css" />
 {% endblock %}
 {% block content %}
 
