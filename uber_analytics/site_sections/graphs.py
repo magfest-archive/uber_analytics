@@ -25,10 +25,10 @@ class RegistrationDataOneYear:
         self.num_days_to_report = 365
 
     def query_current_year(self, session):
-        self.event_name = EVENT_NAME_AND_YEAR
+        self.event_name = c.EVENT_NAME_AND_YEAR
 
         # TODO: we're hacking the timezone info out of ESCHATON (final day of event). probably not the right thing to do
-        self.end_date = DATES['ESCHATON'].replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=None)
+        self.end_date = c.DATES['ESCHATON'].replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=None)
 
         # return registrations where people actually paid money
         # exclude: dealers
@@ -41,11 +41,11 @@ class RegistrationDataOneYear:
             .filter(
                 (
                     (Attendee.group_id != None) &
-                    (Attendee.paid == PAID_BY_GROUP) &          # if they're paid by group
+                    (Attendee.paid == c.PAID_BY_GROUP) &          # if they're paid by group
                     (Group.tables == 0) &                       # make sure they aren't dealers
                     (Group.amount_paid > 0)                     # make sure they've paid something
                 ) | (                                           # OR
-                    (Attendee.paid == HAS_PAID)                 # if they're an attendee, make sure they're fully paid
+                    (Attendee.paid == c.HAS_PAID)                 # if they're an attendee, make sure they're fully paid
                 )
             )\
             .group_by(
