@@ -211,7 +211,7 @@ $( document ).ready(function() {
 
   // try and load optional data from previous comparison years.
   // it's OK for this to fail and it probably will unless the admin installs this file on the server
-  $.getJSON( "../analytics/static/extra-attendance-data.json", function( data ) {
+  $.getJSON( "../static/analytics/extra-attendance-data.json", function( data ) {
     extra_attendance_data = data;
   }).fail(function() {
     // couldn't load the extra data.  not a big deal, it may legitimately not be present
