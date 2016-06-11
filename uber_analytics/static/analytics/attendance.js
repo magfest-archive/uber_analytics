@@ -30,6 +30,11 @@ function get_first_useful_datapoint_index(raw_data) {
     first_datapoint_index--;
   }
 
+  // all datapoints are zero (no attendance data, or we're in a testing env)
+  if (first_datapoint_index == Number.MAX_VALUE) {
+    first_datapoint_index = 0;
+  }
+
   return first_datapoint_index;
 }
 
@@ -146,7 +151,18 @@ function draw_attendance_chart(raw_data)
 
   var ctx = $("#attendanceGraph").get(0).getContext("2d");
 
-  var options = {
+  var no_data_present =
+      chart_data.datasets.length == 1 &&
+      chart_data.datasets[0].data.length == 1 &&
+      chart_data.datasets[0].data[0] == 0;
+
+  if (no_data_present) {
+    $("<p></p>").insertAfter("#attendanceGraph").text("Sorry, no data found to graph.");
+    $("#attendanceGraph").addClass("no_data");
+    return;
+  }
+
+  var chart_draw_options = {
     animation: false,
     bezierCurve: true,
     pointDot: false,
@@ -156,7 +172,7 @@ function draw_attendance_chart(raw_data)
     showXLabels: 20
   };
 
-  var attendanceChart = new Chart(ctx).Line(chart_data, options);
+  var attendanceChart = new Chart(ctx).Line(chart_data, chart_draw_options);
 }
 
 // read from the following GLOBAL VARIABLES and compile a combined data source from them:
