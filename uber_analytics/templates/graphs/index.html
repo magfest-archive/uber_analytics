@@ -1,6 +1,7 @@
-{% extends "base.html" %}
+{% extends "base-admin.html" %}
 {% block title %}Attendance Graphs{% endblock %}
-{% block head_additional %}
+{% block head_javascript %}
+    {{ super() }}
     <!-- <script type="text/javascript" src="https://www.google.com/jsapi"></script> dont think we need this? -->
     <script type="text/javascript" src="../static/analytics/lib/Chart.js"></script>
     <script type="text/javascript">
@@ -8,6 +9,9 @@
     </script>
     <script src="../static/analytics/lib/moment/moment.min.js"></script>
     <script type="text/javascript" src="../static/analytics/attendance.js"></script>
+{% endblock %}
+{% block head_styles %}
+    {{ super() }}
     <link rel="stylesheet" type="text/css" href="../static/analytics/analytics.css" />
 {% endblock %}
 {% block content %}
@@ -18,7 +22,7 @@
             It does not include comp'd badges for staff, guests, bands. It does not include dealers.<br/>
         </p>
 
-        {%comment%}Yea.... I don't know how to fix the w/h here.  someone with better css/html5 do it.{%endcomment%}
+        {# Yea.... I don't know how to fix the w/h here.  someone with better css/html5 do it.#}
         <canvas id="attendanceGraph" width="1000" height="800"></canvas>
 
 {% endblock %}
