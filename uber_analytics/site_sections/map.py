@@ -12,6 +12,7 @@ class Root:
         return {
             'zip_counts': self.zips_counter,
             'center': self.center,
+            'zips':self.zips
         }
 
     def refresh(self, session):
