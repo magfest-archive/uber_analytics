@@ -4,8 +4,7 @@
         <div style="height:100%; width:100%;">
          <div id="map"></div>
     </div>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBc0XLtT-jCG3-v0JFLo9vSr2xYljpRRh4&callback=initMap"
-    async defer></script>
+
     <script>
     var center = {
         "lat": {{ center.Latitude }},
@@ -42,5 +41,7 @@
     }
     </script>
 
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBc0XLtT-jCG3-v0JFLo9vSr2xYljpRRh4&callback=initMap"
+    async defer></script>
 
 {% endblock %}
