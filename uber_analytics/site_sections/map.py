@@ -42,9 +42,9 @@ class Root:
 
     @csv_file
     def radial_zip_data(self, out, session, **params):
-        out.writerow(['# of Attendees', 'City', 'State', 'Zipcode', 'Miles from Event'])
         if params.get('radius'):
             res = ZipcodeSearchEngine().by_coordinate(self.center["Latitude"], self.center["Longitude"], radius=int(params['radius']), returns=0)
+            out.writerow(['# of Attendees', 'City', 'State', 'Zipcode', 'Miles from Event'])
             if len(res) > 0:
                 keys = self.zips.keys()
                 center_coord = (self.center["Latitude"], self.center["Longitude"])
