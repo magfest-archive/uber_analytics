@@ -12,7 +12,7 @@ class Root:
         return {
             'zip_counts': self.zips_counter,
             'center': self.center,
-            'zips':self.zips
+            'zips': self.zips
         }
 
     def refresh(self, session):
@@ -24,7 +24,9 @@ class Root:
                 self.zips_counter[person.zip_code] += 1
 
         for z in self.zips_counter.keys():
-            zips[z] = ZipcodeSearchEngine().by_zipcode(z)
+            found = ZipcodeSearchEngine().by_zipcode(z)
+            if found.Zipcode:
+                zips[z] = found
 
         self.zips = zips
         raise HTTPRedirect("index")

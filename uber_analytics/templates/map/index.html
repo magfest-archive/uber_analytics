@@ -3,11 +3,12 @@
 {% block content %}
 
         <div id="map"></div>
-    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBc0XLtT-jCG3-v0JFLo9vSr2xYljpRRh4&callback=initMap"
+    async defer></script>
     <script>
     var center = {
-        "lat":"{{ center.Latitude }}",
-        "lng":"{{ center.Longitude }}"
+        "lat": {{ center.Latitude }},
+        "lng": {{ center.Longitude }}
     };
     var map;
     function initMap()
@@ -19,21 +20,23 @@
     }
     var windows = [];
     var markers = [];
-    {% for z in zip_counts %}
+    {% for key, value in zips.items %}
         windows[{{ forloop.counter }}] = new google.maps.InfoWindow({
-          content: "{{ z }}"
+          content: "{{ key }}"
         });
         markers[{{ forloop.counter }}] = new google.maps.Marker({
-          position: windows[{{ forloop.counter }}],
+          position: {
+              "lat": {{ value.Latitude }},
+              "lng": {{ value.Longitude }}
+          },
           map: map,
-          title: '{{ zips.z.City }} - {{ zips.z.Zipcode }}'
+          title: '{{ z.City }} - {{ z.Zipcode }}'
         });
         markers[{{ forloop.counter }}].addListener('click', function() {
           infowindow.open(map, markers[{{ forloop.counter }}]);
         });
     {% endfor %}
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBc0XLtT-jCG3-v0JFLo9vSr2xYljpRRh4&callback=initMap"
-    async defer></script>
+
 
 {% endblock %}
