@@ -1,6 +1,11 @@
 from uber.common import *
 from collections import Counter
 from uszipcode import ZipcodeSearchEngine
+from django.template.defaulttags import register
+
+@register.filter
+def get_count(counter, key):
+    return counter.get(key)
 
 @all_renderable(c.STATS)
 class Root:
@@ -9,6 +14,8 @@ class Root:
     center = ZipcodeSearchEngine().by_zipcode("20745")
 
     def index(self):
+        if len(self.zips) == 0:
+            raise HTTPRedirect("refresh")
         return {
             'zip_counts': self.zips_counter,
             'center': self.center,

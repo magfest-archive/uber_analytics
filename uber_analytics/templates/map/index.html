@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% block title %}Attendance Map{% endblock %}
 {% block content %}
-
-        <div id="map"></div>
+        <div style="height:100%; width:100%;">
+         <div id="map"></div>
+    </div>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBc0XLtT-jCG3-v0JFLo9vSr2xYljpRRh4&callback=initMap"
     async defer></script>
     <script>
@@ -11,31 +12,34 @@
         "lng": {{ center.Longitude }}
     };
     var map;
-    function initMap()
-    {
+    function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
             zoom: 4,
             center: center
         });
+
+        var windows = [];
+        var markers = [];
+        {% for key in zip_counts %}
+            windows[{{ forloop.counter0 }}] = new google.maps.InfoWindow({
+                content: "{{ zip_counts|get_count:key }}"
+            });
+        {% endfor %}
+        {% for key, value in zips.items %}
+
+            markers[{{ forloop.counter0 }}] = new google.maps.Marker({
+                position: {
+                    "lat": {{ value.Latitude }},
+                    "lng": {{ value.Longitude }}
+                },
+                map: map,
+                title: '{{ value.City }}, {{ value.State }} - {{ value.Zipcode }}'
+            });
+            markers[{{ forloop.counter0 }}].addListener('click', function () {
+                windows[{{ forloop.counter0 }}].open(map, markers[{{ forloop.counter0 }}]);
+            });
+        {% endfor %}
     }
-    var windows = [];
-    var markers = [];
-    {% for key, value in zips.items %}
-        windows[{{ forloop.counter }}] = new google.maps.InfoWindow({
-          content: "{{ key }}"
-        });
-        markers[{{ forloop.counter }}] = new google.maps.Marker({
-          position: {
-              "lat": {{ value.Latitude }},
-              "lng": {{ value.Longitude }}
-          },
-          map: map,
-          title: '{{ z.City }} - {{ z.Zipcode }}'
-        });
-        markers[{{ forloop.counter }}].addListener('click', function() {
-          infowindow.open(map, markers[{{ forloop.counter }}]);
-        });
-    {% endfor %}
     </script>
 
 
