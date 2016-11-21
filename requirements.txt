@@ -1,1 +1,2 @@
-
+uszipcode==0.1.3
+geopy==1.11.0
