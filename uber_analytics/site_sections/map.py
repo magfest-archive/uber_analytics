@@ -2,7 +2,7 @@ from uber.common import *
 from collections import Counter
 from uszipcode import ZipcodeSearchEngine
 from django.template.defaulttags import register
-from geopy.distance import vicenty
+from geopy.distance import VincentyDistance
 
 
 @register.filter
@@ -50,6 +50,6 @@ class Root:
                 center_coord = (self.center["Latitude"], self.center["Longitude"])
                 for x in res:
                     if x['Zipcode'] in keys:
-                        out.writerow([self.zips_counter[x['Zipcode']], x['City'], x['State'], x['Zipcode'], vincenty((x["Latitude"], x["Longitude"]), center_coord).miles])
+                        out.writerow([self.zips_counter[x['Zipcode']], x['City'], x['State'], x['Zipcode'], VincentyDistance((x["Latitude"], x["Longitude"]), center_coord).miles])
 
 
