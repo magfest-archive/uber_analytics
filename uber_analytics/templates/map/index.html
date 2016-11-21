@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Attendance Map{% endblock %}
+{% block content %}
+
+        <div id="map"></div>
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script>
+    var center = {
+        "lat":"{{ center.Latitude }}",
+        "lng":"{{ center.Longitude }}"
+    };
+    var map;
+    function initMap()
+    {
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 4,
+            center: center
+        });
+    }
+    var windows = [];
+    var markers = [];
+    {% for z in zip_counts %}
+        windows[{{ forloop.counter }}] = new google.maps.InfoWindow({
+          content: "{{ z }}"
+        });
+        markers[{{ forloop.counter }}] = new google.maps.Marker({
+          position: windows[{{ forloop.counter }}],
+          map: map,
+          title: '{{ zips.z.City }} - {{ zips.z.Zipcode }}'
+        });
+        markers[{{ forloop.counter }}].addListener('click', function() {
+          infowindow.open(map, markers[{{ forloop.counter }}]);
+        });
+    {% endfor %}
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBc0XLtT-jCG3-v0JFLo9vSr2xYljpRRh4&callback=initMap"
+    async defer></script>
+
+{% endblock %}
