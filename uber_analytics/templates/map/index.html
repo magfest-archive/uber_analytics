@@ -1,9 +1,25 @@
 {% extends "base.html" %}
 {% block title %}Attendance Map{% endblock %}
 {% block content %}
-        <div style="height:100%; width:100%;">
-         <div id="map"></div>
-    </div>
+         <style>
+          /* Always set the map height explicitly to define the size of the div
+           * element that contains the map. */
+          #map {
+            height: 100%;
+              position: static;
+          }
+          /* Optional: Makes the sample page fill the window. */
+          html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+          }
+        </style>
+        <div id="outDIV" style="position:fixed; top:0; padding: auto;">
+          <div id="inDIV" style="width:64em; height:48em">
+            <div id="map"></div>
+          </div>
+        </div>
 
     <script>
     var center = {
@@ -13,20 +29,33 @@
     var map;
     function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 4,
+            zoom: 10,
             center: center
         });
 
         var windows = [];
         var markers = [];
-        {% for key in zip_counts %}
-            windows[{{ forloop.counter0 }}] = new google.maps.InfoWindow({
-                content: "{{ zip_counts|get_count:key }}"
-            });
-        {% endfor %}
-        {% for key, value in zips.items %}
 
-            markers[{{ forloop.counter0 }}] = new google.maps.Marker({
+        windows[0] = new google.maps.InfoWindow({
+                content: "{{ center.City }}, {{ center.State }} - {{ center.Zipcode }} - Event City"
+            });
+        markers[0] = new google.maps.Marker({
+            position: {
+                "lat": {{ center.Latitude }},
+                "lng": {{ center.Longitude }}
+            },
+            map: map,
+            title: '{{ center.City }}, {{ center.State }} - {{ center.Zipcode }}'
+        });
+        markers[0].addListener('click', function () {
+            windows[0].open(map, markers[0]);
+        });
+
+        {% for key, value in zips.items %}
+            windows[{{ forloop.counter }}] = new google.maps.InfoWindow({
+                content: "{{ value.City }}, {{ value.State }} - {{ value.Zipcode }} - {{ zip_counts|get_count:key }}"
+            });
+            markers[{{ forloop.counter }}] = new google.maps.Marker({
                 position: {
                     "lat": {{ value.Latitude }},
                     "lng": {{ value.Longitude }}
@@ -34,8 +63,8 @@
                 map: map,
                 title: '{{ value.City }}, {{ value.State }} - {{ value.Zipcode }}'
             });
-            markers[{{ forloop.counter0 }}].addListener('click', function () {
-                windows[{{ forloop.counter0 }}].open(map, markers[{{ forloop.counter0 }}]);
+            markers[{{ forloop.counter }}].addListener('click', function () {
+                windows[{{ forloop.counter }}].open(map, markers[{{ forloop.counter }}]);
             });
         {% endfor %}
     }
