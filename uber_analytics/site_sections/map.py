@@ -25,7 +25,7 @@ class Root:
     index.restricted = [c.STATS]
 
     @ajax
-    def refresh(self, session):
+    def refresh(self, session, **params):
         zips = {}
         self.zips_counter = Counter()
         attendees = session.query(Attendee).all()
@@ -45,13 +45,18 @@ class Root:
     def radial_zip_data(self, out, session, **params):
         if params.get('radius'):
             res = ZipcodeSearchEngine().by_coordinate(self.center["Latitude"], self.center["Longitude"], radius=int(params['radius']), returns=0)
-            out.writerow(['# of Attendees', 'City', 'State', 'Zipcode', 'Miles from Event'])
+            out.writerow(['# of Attendees', 'City', 'State', 'Zipcode', 'Miles from Event', '% of Total Attendees'])
             if len(res) > 0:
                 keys = self.zips.keys()
                 center_coord = (self.center["Latitude"], self.center["Longitude"])
+                filter = Attendee.badge_status.in_([c.NEW_STATUS, c.COMPLETED_STATUS])
+                attendees = session.query(Attendee).filter(filter)
+                total_count = attendees.count()
                 for x in res:
                     if x['Zipcode'] in keys:
-                        out.writerow([self.zips_counter[x['Zipcode']], x['City'], x['State'], x['Zipcode'], VincentyDistance((x["Latitude"], x["Longitude"]), center_coord).miles])
+                        out.writerow([self.zips_counter[x['Zipcode']], x['City'], x['State'], x['Zipcode'],
+                                      VincentyDistance((x["Latitude"], x["Longitude"]), center_coord).miles,
+                                      "%.2f" % float(self.zips_counter[x['Zipcode']]/total_count * 100)])
 
     @ajax
     def set_center(self, session, **params):

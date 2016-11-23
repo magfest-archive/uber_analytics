@@ -17,11 +17,13 @@
         </style>
         <div id="outDIV"  class="row">
         <div class="panel col-md-2">
-            <input type="submit" id="refresh" value="Refresh (May Take A While)">
+            <form id="refresh">
+                <input type="submit" value="Refresh (May Take A While)">
+            </form>
             <br>
             <br>
             <form id="radial" action="radial_zip_data">
-                <input type="number" id="distance" name="radius" min="1" placeholder="Miles From Event..." required><br>
+                <input type="number" id="radius" name="radius" min="1" placeholder="Miles From Event..." required><br>
                 <input type="submit" value="Get CSV">
             </form>
             <br>
@@ -42,9 +44,22 @@
     <script>
     $("#refresh").submit(function(e){
         e.preventDefault();
+        $.ajax({
+            url: "refresh",
+            data: {
+                csrf_token: csrf_token
+            },
+            type: "POST",
+            success: function(e){
+                window.location.reload();
+            }
+
+        });
     });
     $("#radial").submit(function(e){
-        var distance = $("#distance");
+        e.preventDefault();
+        var distance = $("#radius");
+        this.submit();
         distance.val("");
     });
 
