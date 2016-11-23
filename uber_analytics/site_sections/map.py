@@ -22,6 +22,8 @@ class Root:
             'zips': self.zips
         }
 
+    index.restricted = [c.STATS]
+
     @ajax
     def refresh(self, session):
         zips = {}
