@@ -16,14 +16,13 @@ class Root:
     center = ZipcodeSearchEngine().by_zipcode("20745")
 
     def index(self):
-        if len(self.zips) == 0:
-            raise HTTPRedirect("refresh")
         return {
             'zip_counts': self.zips_counter,
             'center': self.center,
             'zips': self.zips
         }
 
+    @ajax
     def refresh(self, session):
         zips = {}
         self.zips_counter = Counter()
@@ -38,7 +37,7 @@ class Root:
                 zips[z] = found
 
         self.zips = zips
-        raise HTTPRedirect("index")
+        return True
 
     @csv_file
     def radial_zip_data(self, out, session, **params):
@@ -51,5 +50,12 @@ class Root:
                 for x in res:
                     if x['Zipcode'] in keys:
                         out.writerow([self.zips_counter[x['Zipcode']], x['City'], x['State'], x['Zipcode'], VincentyDistance((x["Latitude"], x["Longitude"]), center_coord).miles])
+
+    @ajax
+    def set_center(self, session, **params):
+        if params.get("zip"):
+            self.center = ZipcodeSearchEngine().by_zipcode(params["zip"])
+            return "Set to %s, %s - %s" % (self.center["City"], self.center["State"], self.center["Zipcode"])
+        return False
 
 
