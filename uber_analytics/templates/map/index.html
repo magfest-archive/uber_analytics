@@ -15,13 +15,81 @@
             padding: 0;
           }
         </style>
-        <div id="outDIV" style="position:fixed; top:0; padding: auto;">
-          <div id="inDIV" style="width:64em; height:48em">
+        <div id="outDIV"  class="row">
+        <div class="panel col-md-2">
+            <form id="refresh">
+                <input type="submit" value="Refresh (May Take A While)">
+            </form>
+            <br>
+            <br>
+            <form id="radial" action="radial_zip_data">
+                <input type="number" id="radius" name="radius" min="1" placeholder="Miles From Event..." required><br>
+                <input type="submit" value="Get CSV">
+            </form>
+            <br>
+            <br>
+            <p>Current Zip: {{ center.Zipcode }}</p>
+            <form id="set_center">
+                <input type="text" id="zip" placeholder="New Zip Code..." required><input type="submit" value="Set Center">
+
+            </form>
+
+        </div>
+          <div id="inDIV" style="width:64em; height:48em" class="panel col-md-10">
             <div id="map"></div>
           </div>
+
         </div>
 
     <script>
+    $("#refresh").submit(function(e){
+        e.preventDefault();
+        $.ajax({
+            url: "refresh",
+            data: {
+                csrf_token: csrf_token
+            },
+            type: "POST",
+            success: function(e){
+                window.location.reload();
+            }
+
+        });
+    });
+    $("#radial").submit(function(e){
+        e.preventDefault();
+        var distance = $("#radius");
+        this.submit();
+        distance.val("");
+    });
+
+    $("#set_center").submit(function(e){
+        e.preventDefault();
+        var zip = $("#zip");
+        $.ajax({
+            url: "set_center",
+            data: {
+                zip: zip.val(),
+                csrf_token: csrf_token
+            },
+            type: "POST",
+            success: function(e){
+                alert(e);
+                window.location.reload();
+            }
+        });
+        zip.val("");
+    });
+
+    var refresh = function(){
+        return false;
+    };
+
+    var set_center = function(center_form){
+        console.log(center_form);
+        return false;
+    };
+
     var center = {
         "lat": {{ center.Latitude }},
         "lng": {{ center.Longitude }}
