@@ -1,7 +1,17 @@
 uber_analytics/static/extra-attendance-data.json.idea
 uber_analytics/static/analytics/extra-attendance-data.json
+.idea
 env
+.env-success
+.vagrant
+__pycache__
 *.pyc
 *.egg-info
+*.log
 dist
+.tox
+.cache
 .eggs/
+.coverage
+development.ini
+test.ini

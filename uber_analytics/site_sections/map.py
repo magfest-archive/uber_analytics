@@ -1,13 +1,13 @@
 from uber.common import *
 from collections import Counter
 from uszipcode import ZipcodeSearchEngine
-from django.template.defaulttags import register
 from geopy.distance import VincentyDistance
 
 
-@register.filter
+@JinjaEnv.jinja_filter()
 def get_count(counter, key):
     return counter.get(key)
+
 
 @all_renderable(c.STATS)
 class Root:
@@ -62,5 +62,3 @@ class Root:
             self.center = ZipcodeSearchEngine().by_zipcode(params["zip"])
             return "Set to %s, %s - %s" % (self.center["City"], self.center["State"], self.center["Zipcode"])
         return False
-
-
