@@ -4,7 +4,7 @@ from uszipcode import ZipcodeSearchEngine
 from geopy.distance import VincentyDistance
 
 
-@JinjaEnv.jinja_filter()
+@JinjaEnv.jinja_filter
 def get_count(counter, key):
     return counter.get(key)
 
