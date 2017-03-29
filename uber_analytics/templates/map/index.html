@@ -121,7 +121,7 @@
 
         {% for key, value in zips.items %}
             windows[{{ forloop.counter }}] = new google.maps.InfoWindow({
-                content: "{{ value.City }}, {{ value.State }} - {{ value.Zipcode }} - {{ zip_counts|get_count:key }}"
+                content: "{{ value.City }}, {{ value.State }} - {{ value.Zipcode }} - {{ zip_counts|get_count(key) }}"
             });
             markers[{{ forloop.counter }}] = new google.maps.Marker({
                 position: {

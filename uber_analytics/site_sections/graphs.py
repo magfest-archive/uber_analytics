@@ -1,6 +1,7 @@
 from uber.common import *
 from sqlalchemy.sql.expression import literal
 
+
 class RegistrationDataOneYear:
     def __init__(self):
         self.event_name = ""
@@ -32,28 +33,23 @@ class RegistrationDataOneYear:
 
         # return registrations where people actually paid money
         # exclude: dealers
-        reg_per_day = session\
-            .query(
-                func.date_trunc(literal('day'),Attendee.registered),
-                func.count( func.date_trunc(literal('day'),Attendee.registered))
-            )\
-            .outerjoin(Attendee.group)\
+        reg_per_day = session.query(
+                func.date_trunc(literal('day'), Attendee.registered),
+                func.count(func.date_trunc(literal('day'), Attendee.registered))
+            ) \
+            .outerjoin(Attendee.group) \
             .filter(
                 (
                     (Attendee.group_id != None) &
-                    (Attendee.paid == c.PAID_BY_GROUP) &          # if they're paid by group
-                    (Group.tables == 0) &                       # make sure they aren't dealers
-                    (Group.amount_paid > 0)                     # make sure they've paid something
-                ) | (                                           # OR
-                    (Attendee.paid == c.HAS_PAID)                 # if they're an attendee, make sure they're fully paid
+                    (Attendee.paid == c.PAID_BY_GROUP) &  # if they're paid by group
+                    (Group.tables == 0) &                 # make sure they aren't dealers
+                    (Group.amount_paid > 0)               # make sure they've paid something
+                ) | (                                     # OR
+                    (Attendee.paid == c.HAS_PAID)         # if they're an attendee, make sure they're fully paid
                 )
-            )\
-            .group_by(
-                func.date_trunc(literal('day'), Attendee.registered)
-            )\
-            .order_by(
-                func.date_trunc(literal('day'),Attendee.registered),
-            )\
+            ) \
+            .group_by(func.date_trunc(literal('day'), Attendee.registered)) \
+            .order_by(func.date_trunc(literal('day'), Attendee.registered)) \
             .all()
 
         # now, convert the query's data into the format we need.
@@ -88,7 +84,7 @@ class RegistrationDataOneYear:
         last_useful_data_index = self.num_days_to_report - 1
         for regs in reversed(self.registrations_per_day):
             if regs != 0:
-                break # found it, so we're done.
+                break  # found it, so we're done.
             last_useful_data_index -= 1
 
         # compute the cumulative sum, leaving all numbers past the last data point at zero
@@ -101,7 +97,6 @@ class RegistrationDataOneYear:
             if current_index == last_useful_data_index:
                 break
             current_index += 1
-
 
     def dump_data(self):
         return {
