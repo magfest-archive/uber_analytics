@@ -1,22 +1,24 @@
 {% extends "base.html" %}
 {% block title %}Attendance Map{% endblock %}
 {% block content %}
-         <style>
-          /* Always set the map height explicitly to define the size of the div
-           * element that contains the map. */
-          #map {
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+        * element that contains the map. */
+        #map {
             height: 100%;
-              position: static;
-          }
-          /* Optional: Makes the sample page fill the window. */
-          html, body {
+            position: static;
+        }
+
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
             height: 100%;
             margin: 0;
             padding: 0;
-          }
-        </style>
-        <div id="outDIV"  class="row">
-        <div class="panel col-md-2">
+        }
+    </style>
+
+    <div class="row">
+        <div class="panel col-md-3">
             <form id="refresh">
                 <input type="submit" value="Refresh (May Take A While)">
             </form>
@@ -31,15 +33,12 @@
             <p>Current Zip: {{ center.Zipcode }}</p>
             <form id="set_center">
                 <input type="text" id="zip" placeholder="New Zip Code..." required><input type="submit" value="Set Center">
-
             </form>
-
         </div>
-          <div id="inDIV" style="width:64em; height:48em" class="panel col-md-10">
+        <div style="height:48em" class="panel col-md-9">
             <div id="map"></div>
-          </div>
-
         </div>
+    </div>
 
     <script>
     $("#refresh").submit(function(e){
@@ -119,7 +118,7 @@
             windows[0].open(map, markers[0]);
         });
 
-        {% for key, value in zips.items %}
+        {% for key, value in zips.items() %}
             windows[{{ forloop.counter }}] = new google.maps.InfoWindow({
                 content: "{{ value.City }}, {{ value.State }} - {{ value.Zipcode }} - {{ zip_counts|get_count(key) }}"
             });
