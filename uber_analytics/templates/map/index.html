@@ -119,10 +119,10 @@
         });
 
         {% for key, value in zips.items() %}
-            windows[{{ forloop.counter }}] = new google.maps.InfoWindow({
+            windows[{{ loop.index }}] = new google.maps.InfoWindow({
                 content: "{{ value.City }}, {{ value.State }} - {{ value.Zipcode }} - {{ zip_counts|get_count(key) }}"
             });
-            markers[{{ forloop.counter }}] = new google.maps.Marker({
+            markers[{{ loop.index }}] = new google.maps.Marker({
                 position: {
                     "lat": {{ value.Latitude }},
                     "lng": {{ value.Longitude }}
@@ -130,8 +130,8 @@
                 map: map,
                 title: '{{ value.City }}, {{ value.State }} - {{ value.Zipcode }}'
             });
-            markers[{{ forloop.counter }}].addListener('click', function () {
-                windows[{{ forloop.counter }}].open(map, markers[{{ forloop.counter }}]);
+            markers[{{ loop.index }}].addListener('click', function () {
+                windows[{{ loop.index }}].open(map, markers[{{ loop.index }}]);
             });
         {% endfor %}
     }
