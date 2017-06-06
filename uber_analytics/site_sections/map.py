@@ -22,6 +22,12 @@ class Root:
             'zips': self.zips
         }
 
+    def heatmap(self):
+        return {
+            'zip_counts': self.zips_counter,
+            'center': self.center,
+            'zips': self.zips
+        }
     @ajax
     def refresh(self, session, **params):
         zips = {}
