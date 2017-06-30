@@ -57,7 +57,7 @@ class Root:
                                       "%.2f" % float(self.zips_counter[x['Zipcode']]/total_count * 100)])
 
     @csv_file
-    def attendee_in_radius_csv(self, out, session, radius, **params):
+    def attendees_can_email_in_radius_csv(self, out, session, radius, **params):
         res = ZipcodeSearchEngine().by_coordinate(self.center["Latitude"], self.center["Longitude"], radius=int(radius),
                                                   returns=0)
         cols = [getattr(Attendee, col.name) for col in Attendee.__table__.columns]
