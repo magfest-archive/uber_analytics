@@ -2,11 +2,19 @@ from uber.common import *
 from collections import Counter
 from uszipcode import ZipcodeSearchEngine
 from geopy.distance import VincentyDistance
+from uber._version import __version__
 
 
-@JinjaEnv.jinja_filter
-def get_count(counter, key):
-    return counter.get(key)
+if float(__version__) > 2017.01:
+    # current version, use this
+    @JinjaEnv.jinja_filter
+    def get_count(counter, key):
+        return counter.get(key)
+else:
+    # old, backwards compatible version only for older ubersystem instances using django
+    @register.filter 
+    def get_count(counter, key):
+        return counter.get(key)
 
 
 @all_renderable(c.STATS)
